@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addTransaction } from '../redux/transactionSlice';
+import { Link } from 'react-router-dom';
 
 function DashboardPage() {
     const dispatch = useDispatch();
@@ -83,12 +84,17 @@ function DashboardPage() {
                             style={{ width: '100%', padding: '8px' }}
                         />
                     </div>
-                    <div style={{ marginBottom: '10px' }}>
+                    <div style={{
+                        marginBottom: '10px',
+                        display: 'flex',
+                        gap: '10px',
+                        alignItems: 'stretch'
+                    }}>
                         <select
                             value={category}
                             onChange={(e) => setCategory(e.target.value)}
                             required
-                            style={{ width: '100%', padding: '8px' }}
+                            style={{ flex: 1, padding: '8px' }}
                         >
                             <option value="" disabled>Select Category</option>
                             {categoryOptions
@@ -99,6 +105,24 @@ function DashboardPage() {
                                     </option>
                                 ))}
                         </select>
+                        <Link
+                            to="/settings"
+                            style={{
+                                fontSize: '13px',
+                                color: '#007bff',
+                                padding: '6px 12px',
+                                border: '1px solid #007bff',
+                                borderRadius: '4px',
+                                height: '36px',
+                                lineHeight: '1',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                boxSizing: 'border-box'
+                            }}
+                        >
+                            Manage
+                        </Link>
                     </div>
                     <div style={{ marginBottom: '10px' }}>
                         <input
