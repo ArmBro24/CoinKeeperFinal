@@ -1,8 +1,25 @@
 import { createSlice, nanoid } from '@reduxjs/toolkit';
 
-const stored = localStorage.getItem('transactions');
+const getCurrentEmail = () => {
+    const token = localStorage.getItem('token');
+    if (!token || !token.startsWith('mocked-token-')) return 'guest';
+    return token.replace('mocked-token-', '');
+};
+
+
+
+const loadTransactions = () => {
+    const email = getCurrentEmail();
+    return JSON.parse(localStorage.getItem(`transactions_${email}`) || '[]');
+};
+
+const saveTransactions = (transactions) => {
+    const email = getCurrentEmail();
+    localStorage.setItem(`transactions_${email}`, JSON.stringify(transactions));
+};
+
 const initialState = {
-    transactions: stored ? JSON.parse(stored) : [],
+    transactions: loadTransactions(),
 };
 
 const transactionSlice = createSlice({
@@ -12,7 +29,7 @@ const transactionSlice = createSlice({
         addTransaction: {
             reducer(state, action) {
                 state.transactions.push(action.payload);
-                localStorage.setItem('transactions', JSON.stringify(state.transactions));
+                saveTransactions(state.transactions);
             },
             prepare(data) {
                 return {
@@ -25,7 +42,7 @@ const transactionSlice = createSlice({
         },
         deleteTransaction(state, action) {
             state.transactions = state.transactions.filter(t => t.id !== action.payload);
-            localStorage.setItem('transactions', JSON.stringify(state.transactions));
+            saveTransactions(state.transactions);
         },
     },
 });

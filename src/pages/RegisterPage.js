@@ -10,15 +10,22 @@ function RegisterPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    // имитация регистрации + автоматический логин
     const handleRegister = (e) => {
         e.preventDefault();
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
 
-        // можно позже заменить на axios.post('/api/register', {...})
-        const mockToken = 'mocked-jwt-token';
-        const mockUser = { email };
+        if (users.find(u => u.email === email)) {
+            alert('User already exists!');
+            return;
+        }
 
-        dispatch(loginSuccess({ token: mockToken, user: mockUser }));
+        const newUser = { email, password };
+        const updatedUsers = [...users, newUser];
+        localStorage.setItem('users', JSON.stringify(updatedUsers));
+
+        const token = 'mocked-token-' + Date.now();
+        localStorage.setItem('token', token);
+        dispatch(loginSuccess({ token, user: { email } }));
         navigate('/dashboard');
     };
 
@@ -26,36 +33,12 @@ function RegisterPage() {
         <div style={{ maxWidth: '400px', margin: '100px auto' }}>
             <h2>Register</h2>
             <form onSubmit={handleRegister}>
-                <div style={{ marginBottom: '10px' }}>
-                    <input
-                        type="email"
-                        placeholder="Email"
-                        value={email}
-                        required
-                        onChange={(e) => setEmail(e.target.value)}
-                        style={{ width: '100%', padding: '8px' }}
-                    />
-                </div>
-                <div style={{ marginBottom: '10px' }}>
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        required
-                        onChange={(e) => setPassword(e.target.value)}
-                        style={{ width: '100%', padding: '8px' }}
-                    />
-                </div>
-                <button type="submit" style={{ width: '100%', padding: '8px' }}>
-                    Зарегистрироваться
-                </button>
+                <input type="email" value={email} required onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
+                <input type="password" value={password} required onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
+                <button type="submit">Register</button>
             </form>
-
             <p style={{ marginTop: '15px' }}>
-                Already have an account?{' '}
-                <Link to="/login" style={{ color: 'blue' }}>
-                    Login
-                </Link>
+                Already have an account? <Link to="/login">Login</Link>
             </p>
         </div>
     );

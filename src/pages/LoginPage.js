@@ -12,12 +12,17 @@ function LoginPage() {
 
     const handleLogin = (e) => {
         e.preventDefault();
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        const foundUser = users.find(u => u.email === email && u.password === password);
 
-        // мок-логика логина (в реальности заменится на API)
-        const mockToken = 'mocked-jwt-token';
-        const mockUser = { email };
+        if (!foundUser) {
+            alert('Invalid email or password!');
+            return;
+        }
 
-        dispatch(loginSuccess({ token: mockToken, user: mockUser }));
+        const token = 'mocked-token-' + email;
+        localStorage.setItem('token', token);
+        dispatch(loginSuccess({ token, user: { email } }));
         navigate('/dashboard');
     };
 
@@ -25,36 +30,12 @@ function LoginPage() {
         <div style={{ maxWidth: '400px', margin: '100px auto' }}>
             <h2>Login</h2>
             <form onSubmit={handleLogin}>
-                <div style={{ marginBottom: '10px' }}>
-                    <input
-                        type="email"
-                        placeholder="Email"
-                        value={email}
-                        required
-                        onChange={(e) => setEmail(e.target.value)}
-                        style={{ width: '100%', padding: '8px' }}
-                    />
-                </div>
-                <div style={{ marginBottom: '10px' }}>
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        required
-                        onChange={(e) => setPassword(e.target.value)}
-                        style={{ width: '100%', padding: '8px' }}
-                    />
-                </div>
-                <button type="submit" style={{ width: '100%', padding: '8px' }}>
-                    Войти
-                </button>
+                <input type="email" value={email} required onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
+                <input type="password" value={password} required onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
+                <button type="submit">Login</button>
             </form>
-
             <p style={{ marginTop: '15px' }}>
-                Don't have an account?{' '}
-                <Link to="/register" style={{ color: 'blue' }}>
-                    Register
-                </Link>
+                Don't have an account? <Link to="/register">Register</Link>
             </p>
         </div>
     );
