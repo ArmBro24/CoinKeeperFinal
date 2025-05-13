@@ -9,7 +9,6 @@ function StatsPage() {
     const [fromDate, setFromDate] = useState('');
     const [toDate, setToDate] = useState('');
 
-    // Filter by date
     const filtered = transactions.filter((tx) => {
         if (!fromDate && !toDate) return true;
         const txDate = new Date(tx.date);
@@ -18,7 +17,6 @@ function StatsPage() {
         return (!from || txDate >= from) && (!to || txDate <= to);
     });
 
-    // Group by category
     const groupByCategory = (type) => {
         const map = {};
         filtered.forEach((tx) => {
@@ -52,6 +50,8 @@ function StatsPage() {
                     <Tooltip />
                 </PieChart>
             </ResponsiveContainer>
+
+
 
             <h3 style={{ marginTop: '50px' }}>Expenses by Category</h3>
             <ResponsiveContainer width="100%" height={300}>

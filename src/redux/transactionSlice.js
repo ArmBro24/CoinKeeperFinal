@@ -40,10 +40,10 @@ const transactionSlice = createSlice({
                 };
             },
         },
-        deleteTransaction(state, action) {
+        /*deleteTransaction(state, action) {
             state.transactions = state.transactions.filter(t => t.id !== action.payload);
             saveTransactions(state.transactions);
-        },
+        },*/
     },
 });
 

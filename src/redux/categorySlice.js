@@ -23,7 +23,7 @@ const categorySlice = createSlice({
                     payload: {
                         id: nanoid(),
                         name,
-                        type, // 'income' or 'expense'
+                        type,
                     },
                 };
             },

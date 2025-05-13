@@ -1,4 +1,3 @@
-// App.js
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -8,6 +7,7 @@ import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
 import StatsPage from './pages/StatsPage';
 import SettingsPage from './pages/SettingsPage';
+import ProtectedRoute from './api/ProtectedRoute';
 import './App.css';
 
 function LayoutWrapper({ children }) {
@@ -26,7 +26,6 @@ function LayoutWrapper({ children }) {
     );
 }
 
-
 function App() {
     return (
         <Router>
@@ -34,9 +33,16 @@ function App() {
                 <Routes>
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
-                    <Route path="/dashboard" element={<DashboardPage />} />
-                    <Route path="/stats" element={<StatsPage />} />
-                    <Route path="/settings" element={<SettingsPage />} />
+
+                    <Route path="/dashboard" element={
+                        <ProtectedRoute><DashboardPage /></ProtectedRoute>
+                    } />
+                    <Route path="/stats" element={
+                        <ProtectedRoute><StatsPage /></ProtectedRoute>
+                    } />
+                    <Route path="/settings" element={
+                        <ProtectedRoute><SettingsPage /></ProtectedRoute>
+                    } />
                 </Routes>
             </LayoutWrapper>
         </Router>
